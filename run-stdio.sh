@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# -*- coding: utf-8 -*-
 # Launch zoekt-mcp in MCP stdio mode, independent of the caller's working directory.
 #
 # Why this exists: Claude Code (at least through 2.1.x) does not apply the stdio
@@ -10,4 +11,6 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$HERE"
-exec "$HERE/.venv/bin/python3" -m src.main "$@"
+# Режим транспорта задаём явно: без --stdio main.py запускает HTTP/SSE-режим,
+# а не stdio, и сервер молчит в протоколе (пустой stdout -> -32000).
+exec "$HERE/venv/bin/python3" -m src.main --stdio "$@"
